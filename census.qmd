@@ -1,0 +1,35 @@
+---
+title: "NYC Census Tracts"
+format: html
+execute: 
+  echo: false
+---
+
+
+```{r}
+#| message: false
+library(tidyverse)
+library(scales)
+
+x <- read_csv("nyc_tracts.csv", show_col_types = FALSE)
+```
+
+
+
+```{r}
+# Remove rows with NA income values for plotting
+x_clean <- x %>% filter(!is.na(med_income))
+
+# 1. Box plot of median income by race
+ggplot(x_clean, aes(x = race, y = med_income, fill = race)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = dollar_format()) +
+  labs(title = "Median Income Distribution by Race",
+       subtitle = "NYC Census Tracts",
+       x = "Race",
+       y = "Median Income") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+
+```
